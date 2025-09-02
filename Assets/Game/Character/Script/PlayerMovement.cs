@@ -64,6 +64,14 @@ public class PlayerMovement : MonoBehaviour
     private float _hitDetectorRadius;
     [SerializeField]
     private LayerMask _hitLayer;
+    [SerializeField]
+    private Transform _climbOffsetUp;
+    [SerializeField]
+    private Transform _climbOffsetDown;
+    [SerializeField]
+    private Transform _climbOffsetLeft;
+    [SerializeField]
+    private Transform _climbOffsetRight;
 
     // Reference
     private float _speed;
@@ -179,12 +187,13 @@ public class PlayerMovement : MonoBehaviour
 
         else if (isPlayerClimbing)
         {
+            
             Vector3 horizontal = Vector3.zero;
             Vector3 vertical = Vector3.zero;
-            Vector3 checkerLeftPosition = transform.position + (transform.up * 1) + (-transform.right * .75f);
-            Vector3 checkerRightPosition = transform.position + (transform.up * 1) + (transform.right * 1f);
-            Vector3 checkerUpPosition = transform.position + (transform.up * 2.5f);
-            Vector3 checkerDownPosition = transform.position + (-transform.up * .25f);
+            Vector3 checkerLeftPosition = _climbOffsetLeft.position;
+            Vector3 checkerRightPosition = _climbOffsetRight.position;
+            Vector3 checkerUpPosition = _climbOffsetUp.position;
+            Vector3 checkerDownPosition = _climbOffsetDown.position;
             bool isAbleClimbLeft = Physics.Raycast(checkerLeftPosition, transform.forward, _climbCheckDistance, _climbableLayer);
             bool isAbleClimbRight = Physics.Raycast(checkerRightPosition, transform.forward, _climbCheckDistance, _climbableLayer);
             bool isAbleClimbUp = Physics.Raycast(checkerUpPosition, transform.forward, _climbCheckDistance, _climbableLayer);
@@ -199,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 vertical = axisDirection.y * transform.up;
             }
-
+            Debug.Log(horizontal+","+vertical);
             movementDirection = horizontal + vertical;
             _rigidbody.AddForce(movementDirection * Time.deltaTime * _climbSpeed);
             Vector3 velocity = new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, 0);
@@ -216,6 +225,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(rotationDegree);
         }
     }
+
 
     private void Sprint(bool isSprint)
     {
@@ -408,18 +418,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /*
+    
     // Measuring climb detector
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         if (_climbDetector == null) return;
-
+        Vector3 checkerLeftPosition = _climbOffsetLeft.position;
+        Vector3 checkerRightPosition = _climbOffsetRight.position;
+        Vector3 checkerUpPosition = _climbOffsetUp.position;
+        Vector3 checkerDownPosition = _climbOffsetDown.position;
         // Visual raycast: front, top, bottom, right, left
-        DrawClimbRay(_climbDetector.position, _climbDetector.forward, _climbCheckDistance);
-        DrawClimbRay(_climbDetector.position, transform.up, _climbCheckDistance);
-        DrawClimbRay(_climbDetector.position, -transform.up, _climbCheckDistance);
-        DrawClimbRay(_climbDetector.position, transform.right, _climbCheckDistance);
-        DrawClimbRay(_climbDetector.position, -transform.right, _climbCheckDistance);
+        DrawClimbRay(checkerUpPosition, transform.forward, _climbCheckDistance);
+        DrawClimbRay(checkerDownPosition, transform.forward, _climbCheckDistance);
+        DrawClimbRay(checkerRightPosition, transform.forward, _climbCheckDistance);
+        DrawClimbRay(checkerLeftPosition, transform.forward, _climbCheckDistance);
     }
 
     private void DrawClimbRay(Vector3 origin, Vector3 direction, float distance)
@@ -428,5 +440,5 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = hitWall ? Color.green : Color.red;
         Gizmos.DrawLine(origin, origin + direction * distance);
         if (hitWall) Gizmos.DrawSphere(hit.point, 0.05f);
-    }*/
+    }
 }
