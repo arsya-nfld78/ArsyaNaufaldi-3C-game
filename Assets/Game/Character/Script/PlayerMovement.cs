@@ -72,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
     private Transform _climbOffsetLeft;
     [SerializeField]
     private Transform _climbOffsetRight;
+    [SerializeField]
+    private PlayerAudioManager _playerAudioManager;
 
     // Reference
     private float _speed;
@@ -362,6 +364,7 @@ public class PlayerMovement : MonoBehaviour
             _playerStance = PlayerStance.Glide;
             _animator.SetBool("IsGliding", true);
             _cameraManager.SetFPSClampedCamera(true, transform.rotation.eulerAngles);
+            _playerAudioManager.PlayGlideSfx();
         }
     }
     private void CancelGlide()
@@ -371,6 +374,7 @@ public class PlayerMovement : MonoBehaviour
             _playerStance = PlayerStance.Stand;
             _animator.SetBool("IsGliding", false);
             _cameraManager.SetFPSClampedCamera(false, transform.rotation.eulerAngles);
+            _playerAudioManager.StopGlideSfx();
         }
     }
     private void Punch()
