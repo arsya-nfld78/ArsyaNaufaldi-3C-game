@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-//using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -166,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
                         float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationAngle, ref _rotationSmoothVelocity, _rotationSmoothTime);
                         transform.rotation = Quaternion.Euler(0f, smoothAngle, 0f);
                         movementDirection = Quaternion.Euler(0f, rotationAngle, 0f) * Vector3.forward;
-                        _rigidbody.AddForce(movementDirection * Time.deltaTime * _speed);
+                        _rigidbody.AddForce(movementDirection * Time.deltaTime * _speed); //, ForceMode.VelocityChange
                     }
                     break;
                 case CameraState.FirstPerson:
@@ -174,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 verticalDirection = axisDirection.y * transform.forward;
                     Vector3 horizontalDirection = axisDirection.x * transform.right;
                     movementDirection = verticalDirection + horizontalDirection;
-                    _rigidbody.AddForce(movementDirection * Time.deltaTime * _speed);
+                    _rigidbody.AddForce(movementDirection * Time.deltaTime * _speed); //, ForceMode.VelocityChange
                     break;
                 default:
                     break;
