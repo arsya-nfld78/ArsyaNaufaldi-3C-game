@@ -73,6 +73,8 @@ public class PlayerMovement : MonoBehaviour
     private Transform _climbOffsetRight;
     [SerializeField]
     private PlayerAudioManager _playerAudioManager;
+    [SerializeField]
+    private Transform _resetCheckpointPosition;
 
     // Reference
     private float _speed;
@@ -421,7 +423,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    
+    public void ResetPositionToCheckpoint()
+    {
+        if (_resetCheckpointPosition != null)
+        {
+            transform.position = _resetCheckpointPosition.position;
+            transform.rotation = _resetCheckpointPosition.rotation;
+        }
+    }
+
     // Measuring climb detector
     private void OnDrawGizmos()
     {
